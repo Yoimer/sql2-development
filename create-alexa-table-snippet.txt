@@ -1,0 +1,5 @@
+CREATE TABLE alexa (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  status VARCHAR(255),
+  PRIMARY KEY (id)
+);
