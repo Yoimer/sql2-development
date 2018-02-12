@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 11, 2018 at 04:05 PM
+-- Generation Time: Feb 12, 2018 at 12:26 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -70,8 +70,7 @@ INSERT INTO `pages` (`id`, `subject_id`, `menu_name`, `position`, `visible`, `co
 (7, 2, 'Mortgages', 3, 1, NULL),
 (8, 3, 'Checking', 1, 1, NULL),
 (9, 3, 'Loans', 2, 1, NULL),
-(10, 3, 'Merchant Services', 3, 1, NULL),
-(11, 1, 'PHP', 11, 1, 'My text was saved at 20:32 January 2 2018');
+(10, 3, 'Merchant Services', 3, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -95,9 +94,7 @@ INSERT INTO `subjects` (`id`, `menu_name`, `position`, `visible`) VALUES
 (1, 'About Globe Bank', 1, 1),
 (2, 'Consumer', 4, 1),
 (3, 'Small Business', 2, 1),
-(6, 'Commercial', 3, 1),
-(8, 'Junk', 5, 1),
-(20, 'C Programming Language', 6, 1);
+(6, 'Commercial', 3, 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
