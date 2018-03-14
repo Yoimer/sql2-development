@@ -7,6 +7,7 @@
     if(!$page) {
       redirect_to(url_for('/index.php'));
     }
+    $subject_id = $page['subject_id'];
   } else {
     // nothing selected; show the homepage
   }
@@ -28,7 +29,7 @@
       } else {
         // Show the homepage
         // The homepage content could:
-        //* be static content (here or in a shard file)
+        //* be static content (here or in a shared file)
         //* show the first page from the nav
         //* be in the database but add code to hide in the nav
         include(SHARED_PATH . '/static_homepage.php');
