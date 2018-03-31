@@ -5,7 +5,9 @@
   function find_all_subjects($options=[]) {
     global $db;
 
-    $visible = isset($options['visible']) ? $options : false;
+    //$visible = isset($options['visible']) ? $options : false;
+    $visible = isset($options['visible']) ? $options['visible'] : false; // bug fixed
+    //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM subjects ";
     if($visible){
@@ -21,7 +23,9 @@
   function find_subject_by_id($id, $options=[]) {
     global $db;
 
-    $visible = isset($options['visible']) ? $options : false;
+    //$visible = isset($options['visible']) ? $options : false;
+    $visible = isset($options['visible']) ? $options['visible'] : false; // bug fixed
+    //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM subjects ";
     $sql .= "WHERE id='" . db_escape($db, $id). "' ";
@@ -160,7 +164,9 @@
   function find_page_by_id($id, $options=[]) {
     global $db;
 
-    $visible = isset($options['visible']) ? $options : false;
+    //$visible = isset($options['visible']) ? $options : false;
+    $visible = isset($options['visible']) ? $options['visible'] : false; // bug fixed
+    //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM pages ";
     $sql .= "WHERE id='" . db_escape($db, $id) . "' ";
@@ -305,7 +311,9 @@
   function find_pages_by_subject_id($subject_id, $options=[]) {
     global $db;
 
-    $visible = isset($options['visible']) ? $options : false;
+    //$visible = isset($options['visible']) ? $options : false;
+    $visible = isset($options['visible']) ? $options['visible'] : false; // bug fixed
+    //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM pages ";
     $sql .= "WHERE subject_id='" . db_escape($db, $subject_id) . "' ";
