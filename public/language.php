@@ -33,7 +33,7 @@ if(is_post_request()) {
 
       <p>The currently selected language is: <?php echo $language; ?></p>
 
-      <form action="<?php echo url_for('/language.php'); xdebug_break(); ?>" method="post">
+      <form action="<?php echo url_for('/language.php');?>" method="post">
 
         <select name="language">
           <?php
