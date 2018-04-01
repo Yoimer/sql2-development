@@ -8,7 +8,7 @@ if(!isset($_GET['id'])) {
 $id = $_GET['id'];
 
 if(is_post_request()) {
-
+ 
   // Handle form values sent by new.php
 
   $page = [];
@@ -21,7 +21,7 @@ if(is_post_request()) {
 
   $result = update_page($page);
   if($result === true) {
-    $_SESSION['message'] = 'The page was updated successfully.';
+    $_SESSION['message'] = 'The page' . ' ' . $page['menu_name'] . ' '. 'was updated successfully.';
     redirect_to(url_for('/staff/pages/show.php?id=' . $id));
   } else {
     $errors = $result;
