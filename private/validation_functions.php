@@ -64,7 +64,7 @@
   // has_inclusion_of( 5, [1,3,5,7,9] )
   // * validate inclusion in a set
   function has_inclusion_of($value, $set) {
-  	return in_array($value, $set);
+    return in_array($value, $set);
   }
 
   // has_exclusion_of( 5, [1,3,5,7,9] )
@@ -93,24 +93,42 @@
     return preg_match($email_regex, $value) === 1;
   }
 
-// has_unique_page_menu_name('History')
-// * Validates uniqueness of pages.menu
-// * For new records, provide only the menu_name.
-// * For existing records, provide current ID as second argument
-//   has_unique_page_menu_name('History', 4)
-function has_unique_page_menu_name($menu_name, $current_id="0") {
-  global $db;
+  // has_unique_page_menu_name('History')
+  // * Validates uniqueness of pages.menu_name
+  // * For new records, provide only the menu_name.
+  // * For existing records, provide current ID as second arugment
+  //   has_unique_page_menu_name('History', 4)
+  function has_unique_page_menu_name($menu_name, $current_id="0") {
+    global $db;
 
-  $sql = "SELECT * FROM pages ";
-  $sql .= "WHERE menu_name='" . db_escape($db, $menu_name) . "' ";
-  $sql .= "AND id != '" . db_escape($db, $current_id) . "'";
+    $sql = "SELECT * FROM pages ";
+    $sql .= "WHERE menu_name='" . db_escape($db, $menu_name) . "' ";
+    $sql .= "AND id != '" . db_escape($db, $current_id) . "'";
 
-  $page_set = mysqli_query($db, $sql);
-  $page_count = mysqli_num_rows($page_set);
-  mysqli_free_result($page_set);
+    $page_set = mysqli_query($db, $sql);
+    $page_count = mysqli_num_rows($page_set);
+    mysqli_free_result($page_set);
 
-  return $page_count === 0;
+    return $page_count === 0;
+  }
 
-}
+  // has_unique_username('johnqpublic')
+  // * Validates uniqueness of admins.username
+  // * For new records, provide only the username.
+  // * For existing records, provide current ID as second argument
+  //   has_unique_username('johnqpublic', 4)
+  function has_unique_username($username, $current_id="0") {
+    global $db;
+
+    $sql = "SELECT * FROM admins ";
+    $sql .= "WHERE username='" . db_escape($db, $username) . "' ";
+    $sql .= "AND id != '" . db_escape($db, $current_id) . "'";
+
+    $result = mysqli_query($db, $sql);
+    $admin_count = mysqli_num_rows($result);
+    mysqli_free_result($result);
+
+    return $admin_count === 0;
+  }
 
 ?>

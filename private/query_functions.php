@@ -10,7 +10,7 @@
     //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM subjects ";
-    if($visible){
+    if($visible) {
       $sql .= "WHERE visible = true ";
     }
     $sql .= "ORDER BY position ASC";
@@ -28,12 +28,11 @@
     //$visible = $options['visible'] ?? false; > php 7.0
 
     $sql = "SELECT * FROM subjects ";
-    $sql .= "WHERE id='" . db_escape($db, $id). "' ";
+    $sql .= "WHERE id='" . db_escape($db, $id) . "' ";
     if($visible) {
       $sql .= "AND visible = true";
     }
-
-    //echo $sql; for debugging
+    // echo $sql;
     $result = mysqli_query($db, $sql);
     confirm_result_set($result);
     $subject = mysqli_fetch_assoc($result);
@@ -42,20 +41,17 @@
   }
 
   function validate_subject($subject) {
-
     $errors = [];
 
     // menu_name
     if(is_blank($subject['menu_name'])) {
       $errors[] = "Name cannot be blank.";
-      //database will only hold strings that are 255 characters long
     } elseif(!has_length($subject['menu_name'], ['min' => 2, 'max' => 255])) {
-        $errors[] = "Name must be between 2 and 255 characters.";
+      $errors[] = "Name must be between 2 and 255 characters.";
     }
 
     // position
     // Make sure we are working with an integer
-    // position on database can only be 3 digits long
     $postion_int = (int) $subject['position'];
     if($postion_int <= 0) {
       $errors[] = "Position must be greater than zero.";
@@ -66,7 +62,6 @@
 
     // visible
     // Make sure we are working with a string
-    // can only be zero or one
     $visible_str = (string) $subject['visible'];
     if(!has_inclusion_of($visible_str, ["0","1"])) {
       $errors[] = "Visible must be true or false.";
@@ -112,9 +107,9 @@
 
     $sql = "UPDATE subjects SET ";
     $sql .= "menu_name='" . db_escape($db, $subject['menu_name']) . "', ";
-    $sql .= "position='"  . db_escape($db, $subject['position']) . "', ";
-    $sql .= "visible='"   . db_escape($db, $subject['visible']) . "' ";
-    $sql .= "WHERE id='"  . db_escape($db, $subject['id']) . "' ";
+    $sql .= "position='" . db_escape($db, $subject['position']) . "', ";
+    $sql .= "visible='" . db_escape($db, $subject['visible']) . "' ";
+    $sql .= "WHERE id='" . db_escape($db, $subject['id']) . "' ";
     $sql .= "LIMIT 1";
 
     $result = mysqli_query($db, $sql);
@@ -180,6 +175,53 @@
     return $page; // returns an assoc. array
   }
 
+  function validate_page($page) {
+    $errors = [];
+
+    // subject_id
+    if(is_blank($page['subject_id'])) {
+      $errors[] = "Subject cannot be blank.";
+    }
+
+    // menu_name
+    if(is_blank($page['menu_name'])) {
+      $errors[] = "Name cannot be blank.";
+    } elseif(!has_length($page['menu_name'], ['min' => 2, 'max' => 255])) {
+      $errors[] = "Name must be between 2 and 255 characters.";
+    }
+    //$current_id = $page['id'] ?? '0'; > php 7.0
+    $current_id = isset($page['id']) ? $page['id'] : '0';
+
+    if(!has_unique_page_menu_name($page['menu_name'], $current_id)) {
+      $errors[] = "Menu name must be unique.";
+    }
+
+
+    // position
+    // Make sure we are working with an integer
+    $postion_int = (int) $page['position'];
+    if($postion_int <= 0) {
+      $errors[] = "Position must be greater than zero.";
+    }
+    if($postion_int > 999) {
+      $errors[] = "Position must be less than 999.";
+    }
+
+    // visible
+    // Make sure we are working with a string
+    $visible_str = (string) $page['visible'];
+    if(!has_inclusion_of($visible_str, ["0","1"])) {
+      $errors[] = "Visible must be true or false.";
+    }
+
+    // content
+    if(is_blank($page['content'])) {
+      $errors[] = "Content cannot be blank.";
+    }
+
+    return $errors;
+  }
+
   function insert_page($page) {
     global $db;
 
@@ -239,56 +281,6 @@
 
   }
 
-  function validate_page($page) {
-
-    $errors = [];
-
-    // subject_id
-    if(is_blank($page['subject_id'])) {
-      $errors[] = "Subject cannot be blank.";
-    }
-
-    // menu_name
-    if(is_blank($page['menu_name'])) {
-      $errors[] = "Name cannot be blank.";
-      //database will only hold strings that are 255 characters long
-    } elseif(!has_length($page['menu_name'], ['min' => 2, 'max' => 255])) {
-        $errors[] = "Name must be between 2 and 255 characters.";
-    }
-
-    $current_id = isset($page['id']) ? $page['id'] : 'DEFAULT VALUE';
-    if(!has_unique_page_menu_name($page['menu_name'], $current_id)) {
-      $errors[] = "Menu name must be unique";
-    }
-
-    // position
-    // Make sure we are working with an integer
-    // position on database can only be 3 digits long
-    $postion_int = (int) $page['position'];
-    if($postion_int <= 0) {
-      $errors[] = "Position must be greater than zero.";
-    }
-    if($postion_int > 999) {
-      $errors[] = "Position must be less than 999.";
-    }
-
-    // visible
-    // Make sure we are working with a string
-    // can only be zero or one
-    $visible_str = (string) $page['visible'];
-    if(!has_inclusion_of($visible_str, ["0","1"])) {
-      $errors[] = "Visible must be true or false.";
-    }
-
-    // content
-    // It is a text field, in mysql it can have almost unlimited content itself
-    if(is_blank($page['content'])){
-      $errors[] = "Content cannot be blank";
-    }
-
-    return $errors;
-  }
-
   function delete_page($id) {
     global $db;
 
@@ -326,23 +318,180 @@
     return $result;
   }
 
-  // Alexa
+  // Admins
 
-  function actual_status() {
+  // Find all admins, ordered last_name, first_name
+  function find_all_admins() {
     global $db;
 
-    $sql = "SELECT status FROM alexa ";
+    $sql = "SELECT * FROM admins ";
+    $sql .= "ORDER BY last_name ASC, first_name ASC";
     $result = mysqli_query($db, $sql);
     confirm_result_set($result);
     return $result;
   }
 
-  function update_status($value) {
+  function find_admin_by_id($id) {
     global $db;
 
+    $sql = "SELECT * FROM admins ";
+    $sql .= "WHERE id='" . db_escape($db, $id) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    $admin = mysqli_fetch_assoc($result); // find first
+    mysqli_free_result($result);
+    return $admin; // returns an assoc. array
+  }
+
+  function validate_admin($admin) {
+
+    if(is_blank($admin['first_name'])) {
+      $errors[] = "First name cannot be blank.";
+    } elseif (!has_length($admin['first_name'], array('min' => 2, 'max' => 255))) {
+      $errors[] = "First name must be between 2 and 255 characters.";
+    }
+
+    if(is_blank($admin['last_name'])) {
+      $errors[] = "Last name cannot be blank.";
+    } elseif (!has_length($admin['last_name'], array('min' => 2, 'max' => 255))) {
+      $errors[] = "Last name must be between 2 and 255 characters.";
+    }
+
+    if(is_blank($admin['email'])) {
+      $errors[] = "Email cannot be blank.";
+    } elseif (!has_length($admin['email'], array('max' => 255))) {
+      $errors[] = "Last name must be less than 255 characters.";
+    } elseif (!has_valid_email_format($admin['email'])) {
+      $errors[] = "Email must be a valid format.";
+    }
+
+    if(is_blank($admin['username'])) {
+      $errors[] = "Username cannot be blank.";
+    } elseif (!has_length($admin['username'], array('min' => 8, 'max' => 255))) {
+      $errors[] = "Username must be between 8 and 255 characters.";
+    } //elseif (!has_unique_username($admin['username'], $admin['id'] ?? 0)) {
+      elseif(!has_unique_username($admin['username'], isset($admin['id']) ? $admin['id'] : 0)) {
+      $errors[] = "Username not allowed. Try another.";
+    }
+
+    if(is_blank($admin['password'])) {
+      $errors[] = "Password cannot be blank.";
+    } elseif (!has_length($admin['password'], array('min' => 12))) {
+      $errors[] = "Password must contain 12 or more characters";
+    } elseif (!preg_match('/[A-Z]/', $admin['password'])) {
+      $errors[] = "Password must contain at least 1 uppercase letter";
+    } elseif (!preg_match('/[a-z]/', $admin['password'])) {
+      $errors[] = "Password must contain at least 1 lowercase letter";
+    } elseif (!preg_match('/[0-9]/', $admin['password'])) {
+      $errors[] = "Password must contain at least 1 number";
+    } elseif (!preg_match('/[^A-Za-z0-9\s]/', $admin['password'])) {
+      $errors[] = "Password must contain at least 1 symbol";
+    }
+
+    if(is_blank($admin['confirm_password'])) {
+      $errors[] = "Confirm password cannot be blank.";
+    } elseif ($admin['password'] !== $admin['confirm_password']) {
+      $errors[] = "Password and confirm password must match.";
+    }
+
+    return $errors;
+  }
+
+  function insert_admin($admin) {
+    global $db;
+
+    $errors = validate_admin($admin);
+    if (!empty($errors)) {
+      return $errors;
+    }
+
+    $hashed_password = $admin['password'];
+
+    $sql = "INSERT INTO admins ";
+    $sql .= "(first_name, last_name, email, username, hashed_password) ";
+    $sql .= "VALUES (";
+    $sql .= "'" . db_escape($db, $admin['first_name']) . "',";
+    $sql .= "'" . db_escape($db, $admin['last_name']) . "',";
+    $sql .= "'" . db_escape($db, $admin['email']) . "',";
+    $sql .= "'" . db_escape($db, $admin['username']) . "',";
+    $sql .= "'" . db_escape($db, $hashed_password) . "'";
+    $sql .= ")";
+    $result = mysqli_query($db, $sql);
+
+    // For INSERT statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // INSERT failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  function update_admin($admin) {
+    global $db;
+
+    $errors = validate_admin($admin);
+    if (!empty($errors)) {
+      return $errors;
+    }
+
+    $hashed_password = $admin['password'];
+
+    $sql = "UPDATE admins SET ";
+    $sql .= "first_name='" . db_escape($db, $admin['first_name']) . "', ";
+    $sql .= "last_name='" . db_escape($db, $admin['last_name']) . "', ";
+    $sql .= "email='" . db_escape($db, $admin['email']) . "', ";
+    $sql .= "hashed_password='" . db_escape($db, $hashed_password) . "',";
+    $sql .= "username='" . db_escape($db, $admin['username']) . "' ";
+    $sql .= "WHERE id='" . db_escape($db, $admin['id']) . "' ";
+    $sql .= "LIMIT 1";
+    $result = mysqli_query($db, $sql);
+
+    // For UPDATE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // UPDATE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  function delete_admin($admin) {
+    global $db;
+
+    $sql = "DELETE FROM admins ";
+    $sql .= "WHERE id='" . db_escape($db, $admin['id']) . "' ";
+    $sql .= "LIMIT 1;";
+    $result = mysqli_query($db, $sql);
+
+    // For DELETE statements, $result is true/false
+    if($result) {
+      return true;
+    } else {
+      // DELETE failed
+      echo mysqli_error($db);
+      db_disconnect($db);
+      exit;
+    }
+  }
+
+  // Alexa
+  function actual_status() {
+    global $db;
+    $sql = "SELECT status FROM alexa ";
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    return $result;
+  }
+  function update_status($value) {
+    global $db;
     // declare empty assoc array
     $alexa = [];
-
     // check value from get request
     switch ($value) {
         case '7':
@@ -360,15 +509,12 @@
             //echo "Check string!!";
             break;
         }
-
     // check that alexa has got 7, 8 or 9 as value
     if(!empty($alexa)) {
-
       $sql = "UPDATE alexa SET ";
       $sql .= "status='" . db_escape($db, $alexa['status']) . "' ";
       $sql .= "WHERE id='1' ";
       $sql .= "LIMIT 1";
-
       $result = mysqli_query($db, $sql);
       // For UPDATE statements, $result is true/false
       if($result) {
@@ -381,5 +527,14 @@
       }
     }
   }
+
+
+
+
+
+
+
+
+
 
 ?>
