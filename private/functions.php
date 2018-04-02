@@ -69,7 +69,27 @@ function get_and_clear_session_message() {
 function display_session_message() {
   $msg = get_and_clear_session_message();
   if(!is_blank($msg)) {
-    return '<div id="message">' . h($msg) . '</div>';
+
+    // position first -
+    $first_hyphen = strpos($msg, '-');
+
+     // position second -
+    $second_hyphen = strpos($msg, '-', strpos($msg, '-') + 1);
+
+    // first part of the string
+    $first_part_msg = substr($msg, 0, ($first_hyphen + 1));
+
+    // second part of the string
+    $second_part_msg = substr($msg, $second_hyphen, -1);
+
+    // red bolded string
+    $red_bolded_msg = substr($msg, ($first_hyphen + 1) , (($second_hyphen - $first_hyphen) - 1));
+
+    $output = '';
+    $output .= "<div id=\"message\">";
+    $output .= "<p>" . $first_part_msg . "<b><span style=\"color:red;\">" . $red_bolded_msg . "</span></b>" . $second_part_msg . "</p>";
+    $output .= "</div>";
+    return $output;
   }
 }
 

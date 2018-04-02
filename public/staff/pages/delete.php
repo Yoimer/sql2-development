@@ -11,7 +11,7 @@ if(is_post_request()) {
 
   $page = find_page_by_id($id);
   $result = delete_page($id);
-  $_SESSION['message'] = 'The page' . ' ' . $page['menu_name'] . ' ' . 'was deleted successfully....';
+  $_SESSION['message'] = 'The page' . ' - ' . $page['menu_name'] . ' - ' . 'was deleted successfully';
   redirect_to(url_for('/staff/pages/index.php'));
 
 } else {
