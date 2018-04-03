@@ -8,8 +8,10 @@ if(!isset($_GET['id'])) {
 $id = $_GET['id'];
 
 if(is_post_request()) {
+  $admin = find_admin_by_id($id);
   $result = delete_admin($id);
-  $_SESSION['message'] = 'Admin deleted.';
+  //$_SESSION['message'] = 'Admin deleted.';
+  $_SESSION['message'] = 'The admin' . ' - ' . $admin['username'] . ' - ' . 'has been deleted successfully.';
   redirect_to(url_for('/staff/admins/index.php'));
 } else {
   $admin = find_admin_by_id($id);
