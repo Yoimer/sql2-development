@@ -15,7 +15,38 @@ if(is_post_request()) {
 
   $_SESSION['username'] = $username;
 
-  redirect_to(url_for('/staff/index.php'));
+  // Validations
+  if(is_blank($username)) {
+    $errors[] = "Username cannot be blank.";
+  }
+  if(is_blank($password)) {
+    $errors[] = "Password cannot be blank.";
+  }
+
+  // if there were no errors. try to log in
+  // but if there were errors, the rest of the form
+  // will render.
+  // there is no need to do anything else
+  // display_errors($errors) will do the job for us
+  if(empty($errors)) {
+    // Using one vaiables ensures that smg is the same
+    $login_failure_msg = "Log is was unsuccessful.";
+    $admin = find_admin_by_username($username);
+    if($admin) {
+
+      if(password_verify($password, $admin['hashed_password'])) {
+        // password matches
+        log_in_admin($admin);
+        redirect_to(url_for('/staff/index.php'));
+      } else {
+        // username found, but password does not match
+        $errors[] = $login_failure_msg;
+      }
+    } else {
+      // no username found
+      $errors[] = $login_failure_msg;
+    }
+  }
 }
 
 ?>
