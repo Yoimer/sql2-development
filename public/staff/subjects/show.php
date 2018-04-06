@@ -1,6 +1,9 @@
 <?php require_once('../../../private/initialize.php'); ?>
 
 <?php
+
+require_login();
+
 $id = isset($_GET['id']) ? $_GET['id'] : 'DEFAULT VALUE';
 //$id = $_GET['id'] ?? '1'; // PHP > 7.0 
 //$subject['menu_name'] = isset($_POST['menu_name']) ? $_POST['menu_name'] : 'DEFAULT VALUE';
