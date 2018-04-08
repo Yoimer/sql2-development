@@ -1,20 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 3.5.2.2
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 02, 2018 at 02:14 PM
--- Server version: 5.5.27
--- PHP Version: 5.4.7
+-- Generation Time: Apr 08, 2018 at 10:51 PM
+-- Server version: 10.1.13-MariaDB
+-- PHP Version: 7.0.5
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `globe_bank`
@@ -26,16 +26,21 @@ SET time_zone = "+00:00";
 -- Table structure for table `admins`
 --
 
-CREATE TABLE IF NOT EXISTS `admins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL,
   `first_name` varchar(255) DEFAULT NULL,
   `last_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
-  `hashed_password` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `hashed_password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`id`, `first_name`, `last_name`, `email`, `username`, `hashed_password`) VALUES
+(2, 'Yoimer', 'Roman', 'yoimer.roman@nextwells.com', 'yoimer29', '$2y$10$aMzWahWaaSETT2DLZaFjpOWD6.aeYOMp8Lm2BkCimarcpae0pz2Li');
 
 -- --------------------------------------------------------
 
@@ -43,11 +48,10 @@ CREATE TABLE IF NOT EXISTS `admins` (
 -- Table structure for table `alexa`
 --
 
-CREATE TABLE IF NOT EXISTS `alexa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `status` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+CREATE TABLE `alexa` (
+  `id` int(11) NOT NULL,
+  `status` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `alexa`
@@ -62,16 +66,14 @@ INSERT INTO `alexa` (`id`, `status`) VALUES
 -- Table structure for table `pages`
 --
 
-CREATE TABLE IF NOT EXISTS `pages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL,
   `subject_id` int(11) DEFAULT NULL,
   `menu_name` varchar(255) DEFAULT NULL,
   `position` int(3) DEFAULT NULL,
   `visible` tinyint(1) DEFAULT NULL,
-  `content` text,
-  PRIMARY KEY (`id`),
-  KEY `fk_subject_id` (`subject_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=62 ;
+  `content` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pages`
@@ -90,7 +92,8 @@ INSERT INTO `pages` (`id`, `subject_id`, `menu_name`, `position`, `visible`, `co
 (10, 3, 'Merchant Services', 3, 1, '<div id="hero-image">\r\n  <img src="images/page_assets/merchant_619738814.png" width="900" height="200" alt="" />\r\n</div>\r\n\r\n<div id="content">\r\n  <h1>Merchant Services</h1>\r\n  <p>Whether onsite, online, or on-the-go, your business needs to be nimble in processing payments. We''ve got the experience to navigate the ever-changing world of payment processing technology. We''ll make it easy for you to get started with a merchant account, so you can start taking payments almost immediately. </p>\r\n  <ul>\r\n    <li><a href="#">Compare our merchant accounts</a></li>\r\n    <li><a href="#">Credit card processing options</a></li>\r\n    <li><a href="#">Accepting mobile payments</a></li>\r\n    <li><a href="#">POS systems</a></li>\r\n  </ul>\r\n\r\n</div>\r\n'),
 (11, 6, 'Financing', 1, 1, '<div id="hero-image">\r\n  <img src="images/page_assets/financing_522867260.png" width="900" height="200" alt="" />\r\n</div>\r\n\r\n<div id="content">\r\n  <h1>Financing</h1>\r\n  <p>From simple loans to long-term financing for sustained corporate growth, our advisors are here to help with a comprehensive selection of solutions and products to build your business.</p>\r\n  <ul>\r\n    <li><a href="#">Lines of credit</a></li>\r\n    <li><a href="#">Asset-based loans</a></li>\r\n    <li><a href="#">Real estate loans</a></li>\r\n    <li><a href="#">Employee stock ownership plans</a></li>\r\n  </ul>\r\n\r\n</div>\r\n'),
 (12, 6, 'Investments', 1, 1, '<div id="hero-image">\r\n  <img src="images/page_assets/investments_97489446.png" width="900" height="200" alt="" />\r\n</div>\r\n\r\n<div id="content">\r\n  <h1>Investments and Asset Management</h1>\r\n  <p>We''ll guide you through the global market like no one else canâ€”from global liquidity, real estate securities, hedge funds, and more. We''ll help you understand investment risk, dealing with inflation and soft economies, as well as asset allocation and regulatory requirements.</p>\r\n  <ul>\r\n    <li><a href="#">Investments for insurance companies</a></li>\r\n    <li><a href="#">Pension fund investments</a></li>\r\n    <li><a href="#">Investment goals for non-profits and charitable institutions</a></li>\r\n    <li><a href="#">Educational establishments investments and endowments</a></li>\r\n    <li><a href="#">Social and environmental impact of investments</a></li>\r\n  </ul>\r\n\r\n</div>\r\n'),
-(13, 6, 'Treasury Services', 1, 0, '<div id="hero-image">\r\n  <img src="images/page_assets/treasury_591423262.png" width="900" height="200" alt="" />\r\n</div>\r\n\r\n<div id="content">\r\n  <h1>Treasury Services</h1>\r\n  <p>Let Globe Bank be your co-CFO. We''ll help you improve cash flow, improve efficiency, streamline payroll and payment processing, and help you to build a leaner, cleaner organization.</p>\r\n  <ul>\r\n    <li><a href="#">Collections and cash applications</a></li>\r\n    <li><a href="#">Deposit and account management options</a></li>\r\n    <li><a href="#">Payment processing</a></li>\r\n    <li><a href="#">Payroll procedures</a></li>\r\n    <li><a href="#">Fraud protection</a></li>\r\n    <li><a href="#">Liquidity management</a></li>\r\n    <li><a href="#">International expansion</a></li>\r\n    <li><a href="#">Healthcare program management</a></li>\r\n  </ul>\r\n\r\n</div>\r\n');
+(13, 6, 'Treasury Services', 1, 0, '<div id="hero-image">\r\n  <img src="images/page_assets/treasury_591423262.png" width="900" height="200" alt="" />\r\n</div>\r\n\r\n<div id="content">\r\n  <h1>Treasury Services</h1>\r\n  <p>Let Globe Bank be your co-CFO. We''ll help you improve cash flow, improve efficiency, streamline payroll and payment processing, and help you to build a leaner, cleaner organization.</p>\r\n  <ul>\r\n    <li><a href="#">Collections and cash applications</a></li>\r\n    <li><a href="#">Deposit and account management options</a></li>\r\n    <li><a href="#">Payment processing</a></li>\r\n    <li><a href="#">Payroll procedures</a></li>\r\n    <li><a href="#">Fraud protection</a></li>\r\n    <li><a href="#">Liquidity management</a></li>\r\n    <li><a href="#">International expansion</a></li>\r\n    <li><a href="#">Healthcare program management</a></li>\r\n  </ul>\r\n\r\n</div>\r\n'),
+(14, 6, 'Calling All My Lovelies', 1, 1, 'Calling All My Lovelies');
 
 -- --------------------------------------------------------
 
@@ -98,13 +101,12 @@ INSERT INTO `pages` (`id`, `subject_id`, `menu_name`, `position`, `visible`, `co
 -- Table structure for table `subjects`
 --
 
-CREATE TABLE IF NOT EXISTS `subjects` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `subjects` (
+  `id` int(11) NOT NULL,
   `menu_name` varchar(255) DEFAULT NULL,
   `position` int(3) DEFAULT NULL,
-  `visible` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  `visible` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `subjects`
@@ -116,6 +118,60 @@ INSERT INTO `subjects` (`id`, `menu_name`, `position`, `visible`) VALUES
 (3, 'Small Business', 2, 0),
 (6, 'Commercial', 3, 1);
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `admins`
+--
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `index_username` (`username`);
+
+--
+-- Indexes for table `alexa`
+--
+ALTER TABLE `alexa`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pages`
+--
+ALTER TABLE `pages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_subject_id` (`subject_id`);
+
+--
+-- Indexes for table `subjects`
+--
+ALTER TABLE `subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `admins`
+--
+ALTER TABLE `admins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `alexa`
+--
+ALTER TABLE `alexa`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `pages`
+--
+ALTER TABLE `pages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT for table `subjects`
+--
+ALTER TABLE `subjects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
