@@ -9,15 +9,14 @@ if(!isset($_GET['id'])) {
 }
 $id = $_GET['id'];
 
+$page = find_page_by_id($id);
+
 if(is_post_request()) {
 
-  $page = find_page_by_id($id);
   $result = delete_page($id);
   $_SESSION['message'] = 'The page' . ' - ' . $page['menu_name'] . ' - ' . 'was deleted successfully';
-  redirect_to(url_for('/staff/pages/index.php'));
+  redirect_to(url_for('/staff/subjects/show.php?id=' . h(u(page['subject_id']))));
 
-} else {
-  $page = find_page_by_id($id);
 }
 
 ?>
