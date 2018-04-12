@@ -4,19 +4,20 @@ require_once('../../../private/initialize.php');
 
 require_login();
 
+$subject_set = find_all_subjects();
+$subject_count = mysqli_num_rows($subject_set) + 1;
+mysqli_free_result($subject_set);
+
 if(is_post_request()) {
 
-  // Handle form values sent by new.php
-
   $subject = [];
-  $subject['menu_name'] = isset($_POST['menu_name']) ? $_POST['menu_name'] : 'DEFAULT VALUE';
-  $subject['position'] = isset($_POST['position']) ? $_POST['position'] : 'DEFAULT VALUE';
-  $subject['visible'] = isset($_POST['visible']) ? $_POST['visible'] : 'DEFAULT VALUE';
+  $subject['menu_name'] = $_POST['menu_name'] ?? '';
+  $subject['position'] = $_POST['position'] ?? '';
+  $subject['visible'] = $_POST['visible'] ?? '';
 
   $result = insert_subject($subject);
-  if ($result === true) {
+  if($result === true) {
     $new_id = mysqli_insert_id($db);
-    //$_SESSION['message'] = 'The subject' . ' ' . $subject['menu_name'] . ' '. 'was created successfully.';
     $_SESSION['message'] = 'The subject' . ' - ' . $subject['menu_name'] . ' - ' . 'was created successfully.';
     redirect_to(url_for('/staff/subjects/show.php?id=' . $new_id));
   } else {
@@ -25,15 +26,11 @@ if(is_post_request()) {
 
 } else {
   // display the blank form
-
+  $subject = [];
+  $subject["menu_name"] = '';
+  $subject["position"] = $subject_count;
+  $subject["visible"] = '';
 }
-
-$subject_set = find_all_subjects();
-$subject_count = mysqli_num_rows($subject_set) + 1;
-mysqli_free_result($subject_set);
-
-$subject = [];
-$subject["position"] = $subject_count;
 
 ?>
 
@@ -48,10 +45,11 @@ $subject["position"] = $subject_count;
     <h1>Create Subject</h1>
 
     <?php echo display_errors($errors); ?>
+
     <form action="<?php echo url_for('/staff/subjects/new.php'); ?>" method="post">
       <dl>
         <dt>Menu Name</dt>
-        <dd><input type="text" name="menu_name" value="" /></dd>
+        <dd><input type="text" name="menu_name" value="<?php echo h($subject['menu_name']); ?>" /></dd>
       </dl>
       <dl>
         <dt>Position</dt>
@@ -73,7 +71,7 @@ $subject["position"] = $subject_count;
         <dt>Visible</dt>
         <dd>
           <input type="hidden" name="visible" value="0" />
-          <input type="checkbox" name="visible" value="1" />
+          <input type="checkbox" name="visible" value="1"<?php if($subject['visible'] == 1) { echo " checked"; } ?> />
         </dd>
       </dl>
       <div id="operations">
